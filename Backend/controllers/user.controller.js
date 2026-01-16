@@ -22,3 +22,29 @@ module.exports.registerUser = async (req, res, next) => {
 
 
 }
+module.exports.loginUser = async(req,res,next) => {
+         const {email,password} = req.body;
+
+
+         if(!email || !password){
+                  return res.status(400).json({message: "Email and password are required"});
+         }
+
+         const user = await userModel.findOne({
+               email
+         }).select('+password');
+
+
+         if(!user){
+                  return res.status(401).json({message: "Invalid credentials"});
+         }
+
+         const isMatch = await user.comparePassword(password);
+         if(!isMatch){
+                  return res.status(401).json({message: "Invalid credentials"});
+         }
+
+
+         const token = user.generateAuthToken();
+         res.status(200).json({ user, token });
+}

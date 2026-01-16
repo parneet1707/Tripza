@@ -83,3 +83,77 @@ curl -X POST http://localhost:3000/users/register \
   ]
 }
 ```
+
+## POST `/users/login`
+
+### Description
+
+Authenticates a user and returns the user object along with an authentication token.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "yourpassword"
+}
+```
+
+#### Field Requirements
+
+- `email`: String, required, must be a valid email address
+- `password`: String, required, minimum 6 characters
+
+### Responses
+
+| Status Code | Description                                      | Response Body Example                |
+|-------------|--------------------------------------------------|--------------------------------------|
+| 200         | User logged in successfully                      | `{ "user": { ... }, "token": "..." }`|
+| 400         | Missing email or password                        | `{ "message": "Email and password are required" }`|
+| 401         | Invalid credentials                              | `{ "message": "Invalid credentials" }`|
+
+### Example Request
+
+```bash
+curl -X POST http://localhost:3000/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "yourpassword"
+  }'
+```
+
+### Example Successful Response (`200 OK`)
+
+```json
+{
+  "user": {
+    "_id": "664a1b2c3d4e5f6789012345",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": ""
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+### Example Error Response (`400 Bad Request`)
+
+```json
+{
+  "message": "Email and password are required"
+}
+```
+
+### Example Error Response (`401 Unauthorized`)
+
+```json
+{
+  "message": "Invalid credentials"
+}
+```
