@@ -13,7 +13,11 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function() {
-    const token = jsonWebToken.sign({ _id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jsonWebToken.sign(
+        { _id: this._id, email: this.email },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' } // Set token to expire in 24 hours
+    );
     return token;
 }
 userSchema.statics.hashPassword = async function(password) {
