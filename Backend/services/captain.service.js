@@ -2,7 +2,7 @@ const captainModel = require('../models/captain.model');
 
 
 
-module.exports.createCaptain = asyn({
+module.exports.createCaptain = async ({
      firstname,lastname,email,password,color,plate,capacity,vehicleType
 }) => {
     if(!firstname || !lastname || !email || !password || !color || !plate || !capacity || !vehicleType){
