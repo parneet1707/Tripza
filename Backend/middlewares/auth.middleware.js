@@ -26,4 +26,6 @@ module.exports = async (req, res, next) => {
     }
 };
 
-
+module.exports.authCaptain = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+}

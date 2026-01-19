@@ -36,3 +36,23 @@ module.exports.registerCaptain = async(req,res) => {
     
 
 }
+
+module.exports.loginCaptain = async(req,res) => {
+    const {email,password} = req.body;
+    const captain = await captainModel.findOne({email}).select('+password');
+
+    if(!captain){
+        res.send(401).json({message: 'Invalid credentials'});
+    }
+
+    const isMatch = await captain.comparePassword(password);
+    if(!isMatch){
+        res.send(401).json({message: 'Invalid credentials'});
+
+    }
+
+    const token = captain.generateAuthToken();
+    res.cookie('token', token);
+
+    res.status(200).json({captain, token});
+}
